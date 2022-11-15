@@ -14,7 +14,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get("/", [\App\Http\Controllers\AuthController::class, "show"]);
-Route::post("/submit", [\App\Http\Controllers\AuthController::class, "create"])->name("submit");
-Route::get("/verify", [\App\Http\Controllers\AuthController::class, "verify"])->name("verify");
-Route::post("/verify", [\App\Http\Controllers\AuthController::class, "sverify"])->name("verify");
+	Auth::routes();
+
+	Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => 'admin'], function () {
+		Route::get('/', "CategoryController@index");
+		Route::resources([
+			"product" => "ProductController",
+			"category" => "CategoryController"
+		]);
+	});
+
+
+	Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
